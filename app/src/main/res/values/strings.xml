@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Spinner</string>
+    <string-array name="planets_array">
+        <item>English</item>
+        <item>Kannada</item>
+
+    </string-array>
+</resources>
