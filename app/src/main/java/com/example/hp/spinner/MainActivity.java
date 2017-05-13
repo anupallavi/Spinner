@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     Button startRecognizer;
     private static final int RQS_RECOGNITION = 1;
 
+    private static final String DB_NAME = "myDBName.db";
+
     String language;
 
     @Override
@@ -39,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         DisplayStringArray= (EditText) findViewById(R.id.print);
         startRecognizer.setOnClickListener(startRecognizerOnClickListener);
         tts= new TextToSpeech(this, this);
-        myDB= new DatabaseHelper(this);
-
+       // myDB= new DatabaseHelper(this);
+        myDB = DatabaseHelper.getInstance(this, DB_NAME);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
@@ -98,9 +100,20 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             } else if (language.equals("Kannada")) {
 
 
-                Cursor cursor = myDB.getListContents();
-                // Cursor cursor = myDB.translate(result);
+              //  String query = "SELECT * FROM list_data";
+             //   Cursor cursor = DatabaseHelper.rawQuery(query);
+                Cursor cursor = DatabaseHelper.translate(result);
+                //  Cursor cursor = myDB.getListContents();
+               //  Cursor cursor = myDB.translate(result);
 
+              /*  if (cursor != null && cursor.getCount() != 0) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            DisplayStringArray.append(cursor.getString(0));
+                        } while (cursor.moveToNext());
+
+                        cursor.close();
+                    }*/
                 if (cursor.moveToNext()) {
                     DisplayStringArray.append(cursor.getString(0));
                 } else {
@@ -108,10 +121,14 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     DisplayStringArray.append(result.get(0));
 
                 }
-            }
-        }
-    }
+                cursor.close();
+                }
+               // else{ DisplayStringArray.append(result.get(0));
 
+                //}
+            }
+
+    }
     @Override
     public void onInit(int status) {
         startRecognizer.setEnabled(true);
